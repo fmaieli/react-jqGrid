@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "^3.6.0",
+    "jqgrid": "^4.6.4",
+    "jquery": "3.6.0",
+    "jquery-ui": "1.12.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
