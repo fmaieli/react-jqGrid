@@ -1,6 +1,5 @@
 import React from 'react';
 import './style.css';
-var $ = require('jquery');
 import mydata from '../data/data.js';
 
 export default class JqGrid extends React.Component {
@@ -21,6 +20,7 @@ export default class JqGrid extends React.Component {
 
   init() {
     this.$grid.jqGrid({
+      styleUI: 'Bootstrap',
       colNames: ['Test', 'Passed', 'Test started', 'Test ended'],
       colModel: [
         { name: 'test', index: 'test', width: 220 },
