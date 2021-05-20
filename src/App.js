@@ -1,11 +1,27 @@
-import React from "react";
-import "./style.css";
+import React from 'react';
+import JqGrid from './JqGrid';
 
-export default function App() {
-  return (
-    <div>
-      <h1>Hello StackBlitz!</h1>
-      <p>Start editing to see some magic happen :)</p>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onChangeFancyTree = this.onChangeFancyTree.bind(this);
+
+    this.state = {};
+  }
+
+  componentDidMount() {}
+
+  onChangeFancyTree(itemsSelected) {
+    this.setState({ fancyTreeItems: itemsSelected });
+    console.log(this.state.fancyTreeItems);
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>jqGrid Component</h1>
+        <JqGrid />
+      </div>
+    );
+  }
 }
