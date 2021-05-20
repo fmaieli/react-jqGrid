@@ -1,7 +1,6 @@
 import React from 'react';
 import './style.css';
 var $ = require('jquery');
-import 'jqgrid';
 import mydata from '../data/data.js';
 
 export default class JqGrid extends React.Component {
