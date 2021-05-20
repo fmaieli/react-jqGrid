@@ -1,9 +1,7 @@
 import React from 'react';
 import './style.css';
-var $ = require('jquery');
-var jQuery = require('jquery');
-require('jquery-ui')($);
-require('jqgrid')($);
+import $ from 'jquery';
+import 'jqgrid';
 
 export default class JqGrid extends React.Component {
   constructor(props) {
