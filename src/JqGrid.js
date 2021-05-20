@@ -1,7 +1,8 @@
 import React from 'react';
 import './style.css';
-import $ from 'jquery';
+var $ = require('jquery');
 import 'jqgrid';
+import mydata from '../data/data.js';
 
 export default class JqGrid extends React.Component {
   constructor(props) {
@@ -10,8 +11,8 @@ export default class JqGrid extends React.Component {
   }
 
   componentDidMount() {
-    this.$grid = $(this.grid);
-    this.$gridPager = $(this.gridPager);
+    this.$grid = jQuery(this.grid);
+    this.$gridPager = jQuery(this.gridPager);
     this.init();
   }
 
@@ -21,28 +22,96 @@ export default class JqGrid extends React.Component {
 
   init() {
     this.$grid.jqGrid({
-      url:
-        'http://trirand.com/blog/phpjqgrid/examples/jsonp/getjsonp.php?callback=?&qwery=longorders',
-      mtype: 'GET',
-      datatype: 'jsonp',
+      colNames: ['Test', 'Passed', 'Test started', 'Test ended'],
       colModel: [
-        { label: 'OrderID', name: 'OrderID', key: true, width: 75 },
-        { label: 'Customer ID', name: 'CustomerID', width: 150 },
+        { name: 'test', index: 'test', width: 220 },
         {
-          label: 'Order Date',
-          name: 'OrderDate',
-          width: 150,
-          formatter: 'date',
-          formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'ShortDate' }
+          name: 'passed',
+          index: 'passed',
+          width: 60,
+          align: 'center',
+          formatter: 'checkbox',
+          edittype: 'checkbox',
+          editoptions: { value: 'Yes:No', defaultValue: 'Yes' },
+          formatoptions: { disabled: false },
+          cellattr: function(rowId, tv, rawObject, cm, rdata) {
+            if (Number(rowId) == 6) {
+              return ' colspan="3"';
+            }
+          },
+          formatter: function(cellvalue, options, rowObject) {
+            if (rowObject.id == 6) {
+              return '<input type="text" id="txtnotes" ref="refnotes" />';
+            } else {
+              if (rowObject.passed === true) {
+                return (
+                  '<input type="checkbox"  id="cbPassed-' +
+                  rowObject.id +
+                  '" checked/>'
+                );
+              } else {
+                return (
+                  '<input type="checkbox"  id="cbPassed-' +
+                  rowObject.id +
+                  '"  />'
+                );
+              }
+            }
+          }
         },
-        { label: 'Freight', name: 'Freight', width: 150 },
-        { label: 'Ship Name', name: 'ShipName', width: 150 }
+        {
+          name: 'teststart',
+          index: 'teststart',
+          width: 75,
+          formatter: 'string',
+          sorttype: 'string',
+          align: 'center',
+          cellattr: function(rowId, tv, rawObject, cm, rdata) {
+            if (Number(rowId) == 6) {
+              return ' style="display:none;"';
+            }
+          }
+        }, //return ' colspan="5"'
+        {
+          name: 'testend',
+          index: 'testend',
+          width: 75,
+          formatter: 'string',
+          sorttype: 'string',
+          align: 'center',
+          cellattr: function(rowId, tv, rawObject, cm, rdata) {
+            if (Number(rowId) == 6) {
+              return ' style="display:none;"';
+            }
+          }
+        }
       ],
+      rowNum: 10,
+      rowList: [5, 10, 20],
+      threeStateSort: true,
+      gridview: true,
+      rownumbers: false,
+      autoencode: true,
+      ignoreCase: true,
+      sortname: 'id',
       viewrecords: true,
-      width: 780,
-      height: 250,
-      rowNum: 20,
-      pager: '#jqGridPager'
+      sortorder: 'desc',
+      shrinkToFit: false,
+      pager: this.$gridPager
+    });
+
+    for (var i = 0; i <= mydata.length; i++)
+      this.$grid.jqGrid('addRowData', i + 1, mydata[i]);
+
+    this.$grid.jqGrid('setGroupHeaders', {
+      useColSpanStyle: true,
+      groupHeaders: [
+        {
+          startColumnName: 'passed',
+          numberOfColumns: 3,
+          titleText: 'Test Duration'
+        }
+      ]
     });
   }
 
@@ -50,9 +119,11 @@ export default class JqGrid extends React.Component {
 
   render() {
     return (
-      <div>
-        <table ref={grid => (this.grid = grid)} />
-        <div ref={gridPager => (this.gridPager = gridPager)} />
+      <div id="gridContainer" ref="refContainer">
+        <form>
+          <table ref={grid => (this.grid = grid)} />
+          <div ref={gridPager => (this.gridPager = gridPager)} />
+        </form>
       </div>
     );
   }
